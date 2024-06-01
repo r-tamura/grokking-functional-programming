@@ -20,5 +20,14 @@ metals.sbt
 # scala 3
 .tasty
 
+# rescript
+.DS_Store
+/node_modules/
+/lib/
+.bsb.lock
+.merlin
+*.res.js
+
+
 # 自動生成?
 classes
