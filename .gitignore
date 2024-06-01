@@ -1,5 +1,24 @@
+# Scala
+target
 *.class
 *.log
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Metals
+.metals/
+.bloop/
+.ammonite/
+metals.sbt
+
+# bloop
+# https://alvinalexander.com/source-code/scala/sample-gitignore-file-scala-sbt-intellij-eclipse/
+.bloop
+.bsp
+
+# scala 3
+.tasty
+
+# 自動生成?
+classes
