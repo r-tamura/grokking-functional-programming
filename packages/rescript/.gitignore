@@ -5,7 +5,3 @@
 .bsb.lock
 .merlin
 *.res.js
-
-
-# 自動生成?
-classes

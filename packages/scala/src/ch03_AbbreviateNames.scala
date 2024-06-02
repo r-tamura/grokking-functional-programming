@@ -6,7 +6,7 @@ def abbreviate(fullName: String): String = {
   s"${firstName.charAt(0)}. $lastName"
 }
 
-def main(args: Array[String]): Unit = {
+object ch03_AbbreviateNames extends App {
   assert(
     abbreviate("Alonzo Church") == "A. Church",
     abbreviate("Alonzo Church")
