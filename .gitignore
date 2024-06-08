@@ -6,6 +6,8 @@
 .merlin
 *.res.js
 
+# Scala
+.metals/
 
 # 自動生成?
 classes

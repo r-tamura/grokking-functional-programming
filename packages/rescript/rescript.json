@@ -1,7 +1,7 @@
 {
   "name": "grokking-functional-programming",
   "sources": {
-    "dir": "src/rescript",
+    "dir": "src",
     "subdirs": true
   },
   "package-specs": {
