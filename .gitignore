@@ -7,7 +7,9 @@
 *.res.js
 
 # Scala
+.scala-build
 .metals/
+.bsp
 
 # 自動生成?
 classes
