@@ -16,7 +16,7 @@
 		},
 		"explorer.fileNesting.enabled": true,
 		"explorer.fileNesting.patterns": {
-			"*.res": "${capture}.res.js"
+			"*.res": "${capture}.res.js, ${capture}.test.js",
 		}
 	}
 }

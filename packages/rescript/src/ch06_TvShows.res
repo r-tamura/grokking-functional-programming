@@ -20,7 +20,17 @@ let extractTitle = (rawShow: string): option<string> => {
   let bracketIndex = String.indexOf(rawShow, "(")
 
   if bracketIndex != -1 {
-    rawShow->String.substring(~start=0, ~end=bracketIndex)->String.trim->Some
+    rawShow
+    ->String.substring(~start=0, ~end=bracketIndex)
+    ->String.trim
+    ->(
+      s =>
+        if s == "" {
+          None
+        } else {
+          Some(s)
+        }
+    )
   } else {
     None
   }
@@ -37,10 +47,44 @@ let extractEndYear = (rawShow: string): option<int> => {
   yearStr->Belt.Option.flatMap(Belt.Int.fromString)
 }
 
+let extractSingleYear = (rawShow: string): option<int> => {
+  let dashIndex = String.indexOf(rawShow, "-")
+  let bracketOpenIndex = String.indexOf(rawShow, "(")
+  let bracketCloseIndex = String.indexOf(rawShow, ")")
+  let yearStr = if (
+    dashIndex == -1 && bracketOpenIndex != -1 && bracketCloseIndex > bracketOpenIndex + 1
+  ) {
+    rawShow
+    ->String.substring(~start=bracketOpenIndex + 1, ~end=bracketCloseIndex)
+    ->Some
+  } else {
+    None
+  }
+  yearStr->Belt.Option.flatMap(Belt.Int.fromString)
+}
+
+let extractSingleYearOrYearEnd = (rawShow: string): option<int> => {
+  extractSingleYear(rawShow)->Belt.Option.orElse(extractEndYear(rawShow))
+}
+
+let extractAnyYear = (rawShow: string): option<int> => {
+  extractStartYear(rawShow)
+  ->Belt.Option.orElse(extractEndYear(rawShow))
+  ->Belt.Option.orElse(extractSingleYear(rawShow))
+}
+
+let extractSingleYearIfNameExists = (rawShow: string): option<int> => {
+  extractTitle(rawShow)->Belt.Option.flatMap(_ => extractSingleYear(rawShow))
+}
+
+let extractAnyYearIfNameExists = (rawShow: string): option<int> => {
+  extractTitle(rawShow)->Belt.Option.flatMap(_ => extractAnyYear(rawShow))
+}
+
 let parseShow = (rawShow: string): option<tvShow> => {
   let title = extractTitle(rawShow)
-  let start = extractStartYear(rawShow)
-  let end = extractEndYear(rawShow)
+  let start = extractStartYear(rawShow)->Belt.Option.orElse(extractSingleYear(rawShow))
+  let end = extractEndYear(rawShow)->Belt.Option.orElse(extractSingleYear(rawShow))
   title->Belt.Option.flatMap(title =>
     start->Belt.Option.flatMap(start => end->Belt.Option.map(end => {title, start, end}))
   )

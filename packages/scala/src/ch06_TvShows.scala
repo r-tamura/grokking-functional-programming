@@ -25,7 +25,12 @@ def extractName(rawShow: String): Option[String] = {
   val bracketIndex = rawShow.indexOf("(")
 
   if (bracketIndex != -1) {
-    Some(rawShow.substring(0, bracketIndex).trim())
+    val name = rawShow.substring(0, bracketIndex).trim()
+    if (name == "") {
+      None
+    } else {
+      return Some(name)
+    }
   } else {
     None
   }
@@ -44,6 +49,37 @@ def extractYearEnd(rawShow: String): Option[Int] = {
   } yield year
 }
 
+def extractSingleYear(rawShow: String): Option[Int] = {
+  val bracketIndex = rawShow.indexOf("(")
+  val bracketEndIndex = rawShow.indexOf(")")
+  val dash = rawShow.indexOf("-")
+
+  val yearStr =
+    if (
+      dash == -1 && bracketIndex != -1 && bracketEndIndex > bracketIndex + 1
+    ) {
+      Some(
+        rawShow.substring(bracketIndex + 1, bracketEndIndex)
+      )
+    } else None
+
+  yearStr.flatMap(_.toIntOption)
+}
+
+def extractSingleYearOrYearEnd(rawShow: String): Option[Int] = {
+  extractSingleYear(rawShow).orElse(extractYearEnd(rawShow))
+}
+
+def extractAnyYear(rawShow: String): Option[Int] = {
+  extractYearStart(rawShow)
+    .orElse(extractYearEnd(rawShow))
+    .orElse(extractSingleYear(rawShow))
+}
+
+def extractSingleYearIfNameExists(rawShow: String): Option[Int] = {
+  extractName(rawShow).flatMap(_ => extractSingleYear(rawShow))
+}
+
 object ch06_TvShows extends App {
   // 6.19 実習: Optionを返す安全な関数
   assert(
@@ -56,5 +92,25 @@ object ch06_TvShows extends App {
   assert(
     parseShow("Breaking Bad) (2008-2013") == None,
     parseShow("Breaking Bad) (2008-2013")
+  )
+
+  // 6.29 実習:  関数型のエラー処理
+  assert(
+    extractSingleYearOrYearEnd("Breaking Bad (2008)") == Some(2008),
+    extractSingleYearOrYearEnd("Breaking Bad (2008)")
+  )
+  assert(
+    extractSingleYearOrYearEnd("Breaking Bad (2008-2013)") == Some(2013),
+    extractSingleYearOrYearEnd("Breaking Bad (2008-2013)")
+  )
+
+  assert(
+    extractAnyYear("A (2008)") == Some(2008)
+  )
+  assert(
+    extractAnyYear("A (2008-2013)") == Some(2008)
+  )
+  assert(
+    extractAnyYear("A (-2020)") == Some(2020)
   )
 }
