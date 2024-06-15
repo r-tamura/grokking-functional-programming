@@ -80,6 +80,16 @@ def extractSingleYearIfNameExists(rawShow: String): Option[Int] = {
   extractName(rawShow).flatMap(_ => extractSingleYear(rawShow))
 }
 
+def addOrResign(
+    parsedShows: Option[List[TvShow]],
+    newParsedShow: Option[TvShow]
+): Option[List[TvShow]] = {
+  for {
+    shows <- parsedShows
+    newShow <- newParsedShow
+  } yield shows :+ newShow
+}
+
 object ch06_TvShows extends App {
   // 6.19 実習: Optionを返す安全な関数
   assert(
@@ -113,4 +123,36 @@ object ch06_TvShows extends App {
   assert(
     extractAnyYear("A (-2020)") == Some(2020)
   )
+
+  // 6.36 コーヒーブレイク: エラー処理の戦略
+  assert(
+    addOrResign(
+      Some(List.empty),
+      Some(TvShow("Chernobyl", 2019, 2019))
+    ) == Some(List(TvShow("Chernobyl", 2019, 2019)))
+  )
+  assert(
+    addOrResign(
+      Some(List(TvShow("Chernobyl", 2019, 2019))),
+      Some(TvShow("The Wire", 2002, 2008))
+    ) == Some(
+      List(
+        TvShow("Chernobyl", 2019, 2019),
+        TvShow("The Wire", 2002, 2008)
+      )
+    )
+  )
+  assert(
+    addOrResign(
+      Some(List(TvShow("Chernobyl", 2019, 2019))),
+      None
+    ) == None
+  )
+  assert(
+    addOrResign(
+      None,
+      Some(TvShow("Chernobyl", 2019, 2019))
+    ) == None
+  )
+  assert(addOrResign(None, None) == None)
 }

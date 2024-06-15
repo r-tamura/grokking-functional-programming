@@ -81,6 +81,14 @@ let extractAnyYearIfNameExists = (rawShow: string): option<int> => {
   extractTitle(rawShow)->Belt.Option.flatMap(_ => extractAnyYear(rawShow))
 }
 
+let addOrResign = (parsedShows: option<array<tvShow>>, newParsedShow: option<tvShow>): option<
+  array<tvShow>,
+> => {
+  parsedShows->Belt.Option.flatMap(shows =>
+    newParsedShow->Belt.Option.map(newShow => shows->Belt.Array.concat([newShow]))
+  )
+}
+
 let parseShow = (rawShow: string): option<tvShow> => {
   let title = extractTitle(rawShow)
   let start = extractStartYear(rawShow)->Belt.Option.orElse(extractSingleYear(rawShow))

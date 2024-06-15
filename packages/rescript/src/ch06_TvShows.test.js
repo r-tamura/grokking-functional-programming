@@ -1,6 +1,6 @@
 import assert from "node:assert"
 import { describe, it } from "node:test"
-import { extractAnyYear, extractSingleYearIfNameExists, extractSingleYearOrYearEnd } from "./ch06_TvShows.res.js"
+import { addOrResign, extractAnyYear, extractSingleYearIfNameExists, extractSingleYearOrYearEnd } from "./ch06_TvShows.res.js"
 
 
 describe("6.29: 関数型のエラー処理", () => {
@@ -50,5 +50,29 @@ describe("6.29: 関数型のエラー処理", () => {
     it("タイトルがあるとき、1シーズンの年を抽出する", () => {
       assert.strictEqual(extractAnyYear("I (2015)"), 2015)
     })
+  })
+})
+
+describe("6.36: エラー処理の戦略", () => {
+  it("TVショーリストが空で新しいTVショーがあるとき、新しいTVショーが追加される", () => {
+    assert.deepStrictEqual(
+      addOrResign([], {title: "Chernobyl", start: 2019, end: 2019}),
+      [{title: "Chernobyl", start: 2019, end: 2019}]
+    )
+  })
+  it("TVショーリストにTVショーがあり、新しいTVショーが渡されたとき、新しいTVショーが追加される", () => {
+    assert.deepStrictEqual(
+      addOrResign([{title: "Chernobyl", start: 2019, end: 2019}], {title: "The Wire", start: 2002, end: 2008}),
+      [{title: "Chernobyl", start: 2019, end: 2019}, {title: "The Wire", start: 2002, end: 2008}]
+    )
+  })
+  it("TVショーリストがあり、新しいTVショーがNoneのとき、Noneが返る", () => {
+    assert.strictEqual(addOrResign([], undefined), undefined)
+  })
+  it("TVショーリストがないとき、Noneが返える", () => {
+    assert.strictEqual(addOrResign(undefined, {title: "Chernobyl", start: 2019, end: 2019}), undefined)
+  })
+  it("TVショーリストも新しいTVショーもないとき、Noneが返る", () => {
+    assert.strictEqual(addOrResign(undefined, undefined), undefined)
   })
 })
