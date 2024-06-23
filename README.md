@@ -11,6 +11,13 @@ cd packages/scala
 scala src/ch02_TipCalculationScala.scala
 ```
 
+ch08以降
+
+```shell
+sbt
+sbt:grokkingfp> run
+```
+
 ### Rescript
 
 ```
