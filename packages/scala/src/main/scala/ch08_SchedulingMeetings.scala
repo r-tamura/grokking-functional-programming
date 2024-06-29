@@ -1,4 +1,5 @@
 import cats.effect.IO
+import cats.implicits.catsSyntaxApplicativeError
 
 case class User(name: String)
 
@@ -54,10 +55,22 @@ object ch0818 {
       person1: String,
       person2: String,
       lengthHours: Int
-  ): IO[Option[MeetingTime]] = {
+  ): IO[Unit] = {
     for {
-      meetings <- scheduledMeetings(person1, person2)
-    } yield possibleMeetings(meetings, 8, 16, lengthHours).headOption
+      existingMeetings <- scheduledMeetings(person1, person2)
+      meetings = possibleMeetings(
+        existingMeetings,
+        8,
+        16,
+        lengthHours
+      )
+    } yield meetings.headOption match {
+      case Some(meeting) =>
+        createMeeting(List(person1, person2), meeting)
+          .orElse(createMeeting(List(person1, person2), meeting))
+          .orElse(IO.unit)
+      case None => IO.unit
+    }
   }
 }
 import ch0818._
