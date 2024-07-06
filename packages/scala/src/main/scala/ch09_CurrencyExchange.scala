@@ -2,6 +2,8 @@ import cats.effect.IO
 import cats.implicits._
 import cats.effect.unsafe.implicits.global
 
+import fs2.{Pure, Stream}
+
 import scala.jdk.CollectionConverters.MapHasAsScala
 
 import ch09_CurrencyExchange.model._
@@ -77,4 +79,5 @@ object ch09_CurrencyExchangeApp extends App {
     actual > 0.8 && actual < 0.9,
     actual
   )
+
 }
