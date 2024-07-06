@@ -1,6 +1,8 @@
 import cats.effect.IO
 import cats.implicits.catsSyntaxApplicativeError
 
+import cats.effect.unsafe.implicits.global
+
 case class User(name: String)
 
 object ch08_SchedulingMeetings {
