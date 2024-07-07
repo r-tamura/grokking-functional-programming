@@ -61,12 +61,13 @@ object ch10_04 {
   )
 
   def topCities(cityCheckIns: Map[City, Int]): List[CityStats] = {
-    cityCheckIns.toList.map(_ match {
-      case (city, checkIns) => CityStats(city, checkIns)
-    })
-    .sortBy(_.checkIns)
-    .reverse
-    .take(3)
+    cityCheckIns.toList
+      .map(_ match {
+        case (city, checkIns) => CityStats(city, checkIns)
+      })
+      .sortBy(_.checkIns)
+      .reverse
+      .take(3)
   }
 
   def processCheckIns(checkIns: Stream[IO, City]): IO[Unit] = {
@@ -99,4 +100,7 @@ object ch10_CheckInsApp extends App {
       City("Sydney")
     )
   ).unsafeRunSync()
+
+  // 実習: 同時IO
+
 }
