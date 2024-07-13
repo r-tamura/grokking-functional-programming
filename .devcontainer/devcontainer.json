@@ -8,6 +8,7 @@
 		"ghcr.io/audacioustux/devcontainers/scala-toolchain:1": {},
 		"ghcr.io/devcontainers/features/node:1": {}
 	},
+	"onCreateCommand": "echo 'Install JDK 21' && wget https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.deb && sudo dpkg -i jdk-21_linux-x64_bin.deb && echo 'AVA_HOME=/usr/lib/jvm/jdk-21-oracle-x64/' >> ~/.zshrc && rm -f jdk-21_linux-x64_bin.deb",
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
